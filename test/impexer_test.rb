@@ -1,6 +1,6 @@
 require 'test/unit'
-require '../src/type'
-require '../src/type_entry'
+require File.expand_path('type.rb', 'src')
+require File.expand_path('type_entry.rb', 'src')
 
 class TestRubyImpexer < Test::Unit::TestCase
   #
@@ -28,60 +28,37 @@ class TestRubyImpexer < Test::Unit::TestCase
 $catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']
 EOS
 
-@produc_macros = <<EOS
+@product_macros = <<EOS
 $catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']
 $prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]
 $baseProduct=baseProduct(code, catalogVersion(catalog(id[default='NamicsProducts']), version[default='Staged']));;;;;;;;
 EOS
   end
 
-  #main test
-  def test_should_generate_impex
-    category_cols = "code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];"
-    category_type = Type.new("Category", category_cols, @category_macros)
-
-    product_cols = ";code[unique=true];name[lang=en];name[lang=de];unit(code);$catalogVersion;description[lang=en];approvalStatus(code);supercategories(code)"
-    product_type = Type.new("Product", product_cols, @produc_macros)
-
-    categories_names = %w{cat1 cat2 cat3}
-    categories_names.each_with_index do |name, index|
-      category_type << TypeEntry.new(category_type, {"code" => "333", "name" => "MyCatName"})
-    end
-
-    main_category = category_type.entries.first 
-
-    product_names = %w{prod1 prod2 prod3}
-    product_names.each_with_index do |name, index|
-      product = TypeEntry.new(product_type, {"code" => "333", "name" => "MyProdName"})
-      product.set("supercategories" => main_category.get("code"))
-    end
-
-    category_type.to_impex("generated_impex/001_category.csv")
-    product_type.to_impex("generated_impex/002_product.csv")
-  end
-
   #single tests
   #
-  def test_should_create_a_type 
+  def test_should_create_a_type
     category_cols = "code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];" 
     category_type = Type.new("Category", category_cols, @category_macros)
-    
+
     assert_not_nil category_type.attributes
     assert_not_nil category_type.entries
     puts category_type.inspect
   end
-  def test_should_create_a_type_entry 
+
+  def test_should_create_a_type_entry
     product_cols = ";code[unique=true];name[lang=en];name[lang=de];unit(code);$catalogVersion;description[lang=en];approvalStatus(code);supercategories(code)"
-    product_type = Type.new("Product", product_cols, @produc_macros)
-    
+    product_type = Type.new("Product", product_cols, @product_macros)
+
     entry = TypeEntry.new(product_type, {"code" => "333", "name" => "MyName"})
     product_type << entry
     puts entry.inspect
   end
-  def test_entry_should_reference_other_entries 
+
+  def test_entry_should_reference_other_entries
     product_cols = ";code;name;name[lang=de];unit(code);$catalogVersion;description[lang=en];approvalStatus(code);supercategories(code)"
-    product_type = Type.new("Product", product_cols, @produc_macros)
-    
+    product_type = Type.new("Product", product_cols, @product_macros)
+
     entry = TypeEntry.new(product_type, {"code" => "333", "name" => "MyName"})
     product_type << entry
 

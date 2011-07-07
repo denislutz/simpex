@@ -1,4 +1,0 @@
-$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']
-$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]
-$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='NamicsProducts']), version[default='Staged']));;;;;;;;
-INSERT_UPDATE Product;code[unique=true];name[lang=en];name[lang=de];unit(code);$catalogVersion;description[lang=en];approvalStatus(code);supercategories(code)
