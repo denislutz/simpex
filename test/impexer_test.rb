@@ -1,7 +1,6 @@
 require 'test/unit'
 require '../src/type'
 require '../src/type_entry'
-require '../src/impex_file'
 
 class TestRubyImpexer < Test::Unit::TestCase
   #
