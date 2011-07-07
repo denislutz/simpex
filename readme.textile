@@ -1,0 +1,18 @@
+h1. Simpex – Ruby library for simple ImpEx generation
+
+
+h2. Setup
+
+rvm install 1.9.1
+cd to directory and run _bundle install_
+
+h2. ImpEx file generation
+
+For now it only generates a dummy ImpEx file.
+Run _rake simpex:generate_
+You can find the generated file in 'tmp/impex'
+
+h2. Todo
+
+* cleanup
+* make generation dynamic (what are we going to use a input format? yaml? json?)
