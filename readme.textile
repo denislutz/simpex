@@ -4,7 +4,7 @@ The impex torture is over guys! Enjoy your hybris projects with a nice ruby api 
 
 Simpex will make your life easier because:
 
-* it will remove the csv noise from your eyes
+* it will remove the "csv noise" from your eyes
 * let you focus on the important stuff, building relationships between your impex tables
 * process any incoming format like xml, excel, csv with the power of ruby
 * do basic impex validations for you before hybris does it
