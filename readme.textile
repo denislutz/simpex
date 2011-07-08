@@ -25,12 +25,27 @@ Run _rake simpex:test_ to execute all tests
 h2. Todo
 
 * cleanup
-* make generation dynamic (what are we going to use a input format? yaml? json?)
-* impex macros library for creating some standard impex macros
 
 
-h3. Todo Impex Factory
-1. Impex factory for standard hybris types go create a bare minimum product setup that is valid in hybris
+h3. Different formats support
+
+make generation dynamic (what are we going to use a input format? yaml? json?)
+
+
+h3. Impex Factory
+
+The impex factory for standard hybris types will make it possible to create a valid hybris db setup only with ruby, so no impex knowledge is necessary at all. 
+This is very convinient for hybris test fixtures setup and the initial product import.
+
+
+h3. Macros Library
+
+The macros library could be some small set of typical macros used in impex, something like:
+{code}
+$catalogversion=catalogversion(catalog(id[default='simpexproducts'])
+{code}
+
+
 
 
 h2. Features
