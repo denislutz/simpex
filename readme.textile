@@ -1,5 +1,13 @@
 h1. Simpex – Ruby library for simple ImpEx generation
 
+The impex mess is over guys, enjoy your hybris projects with a nice ruby api for impex generation!
+
+Simpex will make your life easier because:
+
+* it will remove the csv noise from your eyes
+* let you focus on the important stuff, building relationships between your impex tables
+* process any incoming format like xml, excel, csv with the power of ruby
+* do basic impex validations for you before hybris does it
 
 h2. Setup
 
@@ -10,9 +18,12 @@ h2. ImpEx file generation
 
 For now it only generates a dummy ImpEx file.
 Run _rake simpex:generate_
-You can find the generated file in 'tmp/impex'
+You can find the generated file in 'tmp/'
+
+Run _rake simpex:test_ to execute all tests
 
 h2. Todo
 
 * cleanup
-* make generation dynamic (what are we going to use a input format? yaml? json?)
+* make generation dynamic 
+* think about supporting of different formats as input (xml, json, csv) 
