@@ -1,6 +1,5 @@
 require 'test/unit'
-require File.expand_path('type.rb', 'src')
-require File.expand_path('type_entry.rb', 'src')
+require File.expand_path('simpex.rb', 'lib')
 
 class TestRubyImpexer < Test::Unit::TestCase
   #
