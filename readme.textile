@@ -26,6 +26,12 @@ h2. Todo
 
 * cleanup
 * make generation dynamic (what are we going to use a input format? yaml? json?)
+* impex macros library for creating some standard impex macros
+
+
+h3. Todo Impex Factory
+1. Impex factory for standard hybris types go create a bare minimum product setup that is valid in hybris
+
 
 h2. Features
 
