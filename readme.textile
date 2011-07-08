@@ -25,5 +25,8 @@ Run _rake simpex:test_ to execute all tests
 h2. Todo
 
 * cleanup
-* make generation dynamic 
-* think about supporting of different formats as input (xml, json, csv) 
+* make generation dynamic (what are we going to use a input format? yaml? json?)
+
+h2. Features
+
+* we might want to use this https://github.com/aeden/activewarehouse-etl at some point for data extraction from different sources
