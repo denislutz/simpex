@@ -5,11 +5,18 @@ require 'rubygems'
 require 'rest-client'
 
 namespace :simpex do
-  @output_directory = "tmp"
-
+  #
+  #
   #rake simpex:generate
   desc "Generates ImpEx file"
+  task :produce_impex do
+    Factory.generate_base_catalog_setup(:dest => File.new("tmp/basic_setup.csv"))
+  end
+
+  #rake simpex:generate TODO: once factory done
+  desc "Generates ImpEx file"
   task :generate do
+    @output_directory = "tmp"
     @category_macros = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']"
     @product_macros  = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']\n" +
       "$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]\n" +
