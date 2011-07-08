@@ -31,7 +31,6 @@ namespace :simpex do
       product.set("supercategories" => main_category.get("code"))
     end
 
-    FileUtils.makedirs(@output_directory) unless File.exists?(@output_directory)
     category_type.to_impex("#{@output_directory}/001_category.csv")
     product_type.to_impex("#{@output_directory}/002_product.csv")
 
