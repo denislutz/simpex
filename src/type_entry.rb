@@ -3,10 +3,18 @@ class TypeEntry
   attr :type, :values
 
   def  initialize(type, values)
-    raise "Type must be a Type" unless type.kind_of? Type
-    raise "Values must be a hash" if (!values.kind_of?(Hash) )
+    raise ArgumentError.new("Type must be a Type") unless type.kind_of? Type
+    raise ArgumentError.new("Values must be a hash or an array") if (!values.kind_of?(Hash) ) && !values.kind_of?(Array)
     @type = type
-    @values = values 
+
+    if values.kind_of?(Hash)
+      @values = values 
+    else 
+      @values = {}
+      @type.attributes.each_with_index do |att,index|
+        @values[att] = values[index]
+      end
+    end
   end
 
   def get(attribute)

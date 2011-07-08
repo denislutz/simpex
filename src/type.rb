@@ -6,7 +6,7 @@ class Type
 
   def  initialize(name, header, macros="")
     @macros = macros
-    @attributes = header.split(";").reject{|e| e == ""} # Array of instance vars
+    @attributes = header.reject{|e| e == ""} # Array of instance vars
     @name = name 
     @entries = []
   end

@@ -1,3 +1,4 @@
+require 'rake/testtask'
 require File.expand_path('type.rb', 'src')
 require File.expand_path('type_entry.rb', 'src')
 
@@ -9,8 +10,8 @@ namespace :simpex do
   task :generate do
     @category_macros = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']"
     @product_macros  = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']\n" +
-                       "$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]\n" +
-                       "$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='SimpexProducts']), version[default='Staged']));;;;;;;;"
+      "$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]\n" +
+      "$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='SimpexProducts']), version[default='Staged']));;;;;;;;"
 
     category_cols = "code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];"
     category_type = Type.new("Category", category_cols, @category_macros)
@@ -36,5 +37,13 @@ namespace :simpex do
 
     puts "Files generated inside #{@output_directory}"
   end
+
+
+  desc "Run all tests"
+  Rake::TestTask.new("test") do |t|
+    t.pattern = 'test/test_*.rb'
+    t.verbose = true
+    t.warning = true
+  end 
 
 end
