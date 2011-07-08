@@ -16,3 +16,7 @@ h2. Todo
 
 * cleanup
 * make generation dynamic (what are we going to use a input format? yaml? json?)
+
+h2. Features
+
+* we might want to use this https://github.com/aeden/activewarehouse-etl at some point for data extraction from different sources
