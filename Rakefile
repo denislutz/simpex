@@ -2,7 +2,7 @@ require File.expand_path('type.rb', 'src')
 require File.expand_path('type_entry.rb', 'src')
 
 namespace :simpex do
-  @output_directory = "tmp/impex"
+  @output_directory = "tmp"
 
   #rake simpex:generate
   desc "Generates ImpEx file"
@@ -34,7 +34,7 @@ namespace :simpex do
     category_type.to_impex("#{@output_directory}/001_category.csv")
     product_type.to_impex("#{@output_directory}/002_product.csv")
 
-    puts "Files generated inside 'tmp/impex/'."
+    puts "Files generated inside #{@output_directory}"
   end
 
 end
