@@ -40,9 +40,8 @@ so no impex knowledge is necessary at all. This is very convinient for hybris te
 h3. Macros Library
 
 The macros library could be some small set of typical macros used in impex, something like:
-@
-$catalogversion=catalogversion(catalog(id[default='simpexproducts'])
-@
+
+@$catalogversion=catalogversion(catalog(id[default='simpexproducts'])@
 
 
 
