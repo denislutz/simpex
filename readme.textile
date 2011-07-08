@@ -12,8 +12,8 @@ Simpex will make your life easier because:
 
 Here is a first sample:
 
-@
-    category_macros = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']"
+
+    @category_macros = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']"
     product_macros  = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']\n" +
       "$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]\n" +
       "$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='SimpexProducts']), version[default='Staged']));;;;;;;;"
@@ -38,9 +38,7 @@ Here is a first sample:
     end
 
     category_type.to_impex("#{output_directory}/001_category.csv")
-    product_type.to_impex("#{output_directory}/002_product.csv")
-
-@
+    product_type.to_impex("#{output_directory}/002_product.csv")@
 
 h2. Setup
 
