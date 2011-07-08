@@ -88,4 +88,17 @@ EOS
     assert_equal "333", entry.get("code")
     assert_equal "MyName", entry.get("name")
   end
+  def test_should_accept_an_array_as_columns_of_type_entry
+    product_cols = %w{code name name[lang=de] unit(code)}
+    product_type = Type.new("Product", product_cols, @produc_macros)
+    
+
+    values = [] 
+    
+    entry = TypeEntry.new(product_type, values )
+    product_type << entry
+
+    assert_equal "333", entry.get("code")
+    assert_equal "MyName", entry.get("name")
+  end
 end
