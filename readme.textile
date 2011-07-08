@@ -1,6 +1,6 @@
 h1. Simpex – Ruby library for simple ImpEx generation
 
-The impex mess is over guys, enjoy your hybris projects with a nice ruby api for impex generation!
+The impex torture is over guys! Enjoy your hybris projects with a nice ruby api for impex generation!
 
 Simpex will make your life easier because:
 
