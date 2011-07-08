@@ -12,10 +12,10 @@ namespace :simpex do
       "$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]\n" +
       "$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='SimpexProducts']), version[default='Staged']));;;;;;;;"
 
-    category_cols = "code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];"
+    category_cols = %w{code[unique=true] $catalogVersion name[lang=de] name[lang=en] description[lang=de] description[lang=en]}
     category_type = Type.new("Category", category_cols, @category_macros)
 
-    product_cols = ";code[unique=true];name[lang=en];name[lang=de];unit(code);$catalogVersion;description[lang=en];approvalStatus(code);supercategories(code)"
+    product_cols = %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion description[lang=en] approvalStatus(code) supercategories(code)}
     product_type = Type.new("Product", product_cols, @product_macros)
 
     categories_names = %w{cat1 cat2 cat3}

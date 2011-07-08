@@ -21,6 +21,12 @@ class TestType < Test::Unit::TestCase
     @product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, macros)
   end
 
+  def test_validate_type_input_on_creation
+    assert_raise ArgumentError do
+      @category_type = Type.new("MyType", "wrong;string")
+    end
+  end
+
   def test_should_create_a_type
     assert_not_nil @category_type.attributes
     assert_not_nil @category_type.entries
@@ -44,6 +50,9 @@ class TestType < Test::Unit::TestCase
   def test_should_fail_if_wrong_values_given
     assert_raise ArgumentError do
       entry = TypeEntry.new(@product_type, "somewrong string")
+    end
+    assert_raise ArgumentError do
+      entry = TypeEntry.new(nil, "somewrong string")
     end
   end
 
