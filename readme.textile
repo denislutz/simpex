@@ -10,7 +10,6 @@ Simpex will make your life easier because:
 * do basic impex validations for you before hybris does it
 
 
-
 h2. Setup
 
 rvm install 1.9.1
