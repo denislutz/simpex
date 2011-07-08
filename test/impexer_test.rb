@@ -8,20 +8,20 @@ class TestRubyImpexer < Test::Unit::TestCase
   #
   #$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']
   #$prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]
-  #$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='NamicsProducts']), version[default='Staged']));;;;;;;;
+  #$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='SimpexProducts']), version[default='Staged']));;;;;;;;
   #
   # Create a category (2)
   #
   #INSERT_UPDATE Category;code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];
-  #;SampleCategory;NamicsProducts:Online;Testkategorie;Sample category;Dies ist eine Testkategorie;This is a sample category;
+  #;SampleCategory;SimpexProducts:Online;Testkategorie;Sample category;Dies ist eine Testkategorie;This is a sample category;
   # 
   #
   # Create some products (3)
   #
   #INSERT_UPDATE Product;code[unique=true];name[lang=en]; name[lang=de];unit(code);$catalogVersion; description[lang=en]; description[lang=de]; approvalStatus(code);supercategories(code)
-  #;sampleproduct1;SampleProduct1;Testprodukt1;pieces;NamicsProducts:Online;"This is a sample product";"Dies ist ein Testprodukt";approved;SampleCategory
-  #;sampleproduct2;SampleProduct2;Testprodukt2;pieces;NamicsProducts:Online;"This is another sample product";"Dies ist ein weiteres Testprodukt";approved;SampleCategory
-  #;sampleproduct3;SampleProduct3;Testprodukt3;pieces;NamicsProducts:Online;"This is the third sample product";"Dies ist das dritte Testprodukt";approved;SampleCategory
+  #;sampleproduct1;SampleProduct1;Testprodukt1;pieces;SimpexProducts:Online;"This is a sample product";"Dies ist ein Testprodukt";approved;SampleCategory
+  #;sampleproduct2;SampleProduct2;Testprodukt2;pieces;SimpexProducts:Online;"This is another sample product";"Dies ist ein weiteres Testprodukt";approved;SampleCategory
+  #;sampleproduct3;SampleProduct3;Testprodukt3;pieces;SimpexProducts:Online;"This is the third sample product";"Dies ist das dritte Testprodukt";approved;SampleCategory
 
   def setup
 @category_macros = <<EOS
@@ -31,7 +31,7 @@ EOS
 @product_macros = <<EOS
 $catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']
 $prices=europe1Prices[translator=de.hybris.platform.europe1.jalo.impex.Europe1PricesTranslator]
-$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='NamicsProducts']), version[default='Staged']));;;;;;;;
+$baseProduct=baseProduct(code, catalogVersion(catalog(id[default='SimpexProducts']), version[default='Staged']));;;;;;;;
 EOS
   end
 
