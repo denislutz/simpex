@@ -45,6 +45,7 @@ The macros library could be some small set of typical macros used in impex, some
 @$catalogversion=catalogversion(catalog(id[default='simpexproducts'])@
 
 created in ruby with 
+
 @Macros.catalog_version("simpexproducts")@
 
 
