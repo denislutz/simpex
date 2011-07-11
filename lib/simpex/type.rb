@@ -18,25 +18,6 @@ class Type
     @entries << entry
   end
 
-  def to_impex(file_name="")
-    if file_name.empty? 
-      file_name = "#{@name}.csv"
-    else
-      dir_name = File.dirname(file_name)
-      unless Dir.exist?(dir_name)
-        FileUtils.mkdir(dir_name)
-      end
-    end
-    puts "writing impex file #{file_name}"
-    File.open(file_name, 'w') do |f|
-      f.puts(@macros)
-      f.puts("INSERT_UPDATE #{@name};" + @attributes.join(";"))
-      @entries.each do |entry|
-        f.puts entry.to_impex
-      end
-    end
-  end
-
   def to_imp
     puts "impexifying #{self.inspect}"
     result = ""
@@ -45,10 +26,10 @@ class Type
       result << "\n" 
     end
     result << "#{@impex_command} #{@name}" +  impexify(@attributes)
-    result << "\n" 
     @entries.each do |entry|
       result << entry.to_imp
     end
+    result << "\n" 
     result
   end
 

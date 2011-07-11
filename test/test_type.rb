@@ -62,10 +62,30 @@ class TestType < Test::Unit::TestCase
   end
 
   def test_should_write_the_impex_resupt_to_the_given_folder
-
     impex_dest_dir = "test/tmp"
     FileUtils.mkdir(impex_dest_dir) unless Dir.exist?(impex_dest_dir)
 
+    result = standard_result(impex_dest_dir)
+    result.impexify
+
+    FileUtils.rm_rf(impex_dest_dir)
+  end
+
+  def test_should_write_the_result_in_one_file
+    impex_dest_dir = "test/tmp"
+    FileUtils.mkdir(impex_dest_dir) unless Dir.exist?(impex_dest_dir)
+    result_file_path = "#{impex_dest_dir}/result.csv" 
+
+    assert !File.exist?(result_file_path)
+    result = standard_result(impex_dest_dir)
+    result.impexify("result.csv")
+    assert File.exist?(result_file_path), "the file #{result_file_path} should have been created"
+
+    File.delete(result_file_path)
+  end
+
+  private 
+  def standard_result(impex_dest_dir)
     result = ImpexResult.new(impex_dest_dir)
 
     language_type = Type.new("Language", %w{isocode[unique=true] active})
@@ -84,6 +104,6 @@ class TestType < Test::Unit::TestCase
     catalog_version_type << catalog_version
     result << catalog_version_type 
 
-    result.impexify
+    result
   end
 end

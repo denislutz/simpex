@@ -10,6 +10,7 @@ namespace :simpex do
   task :generate do
     output_directory = "tmp"
     Factory.generate_base_catalog_setup_to(output_directory)
+    Factory.generate_base_catalog_setup_to_file(output_directory,"single_file_result.csv")
     puts "Files generated inside #{output_directory}"
   end
 
