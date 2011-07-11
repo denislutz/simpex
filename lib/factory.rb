@@ -18,7 +18,7 @@ class Factory
 #;$testProduct0-id;;$testProduct0-idde;$testProduct0-iden;pieces;157 EUR;approved;admin;0;$testCategory0-id
 #;$testProduct1-id;;$testProduct1-idde;$testProduct1-iden;pieces;157 EUR;approved;admin;0;$testCategory0-id,$testCategory1-id
 
-  def Factory.generate_base_catalog_setup(attr={})
+  def Factory.generate_base_catalog_setup
     result = []
 
     language_type = Type.new("Language", %w{isocode[unique=true] active})
@@ -37,6 +37,6 @@ class Factory
     catalog_version_type << catalog_version
     result << catalog_version_type 
 
-    FileWriter.write(result, {:dest => File.new("basic_setup.csv")}.merge(attr)) 
+    FileWriter.write(result, {:dest_folder => File.new("tmp")}) 
   end
 end

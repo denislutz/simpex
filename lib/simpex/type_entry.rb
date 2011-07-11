@@ -1,3 +1,4 @@
+require 'csv'
 class TypeEntry
 
   attr :type, :values
@@ -27,5 +28,14 @@ class TypeEntry
 
   def to_impex
     @values.values.join(";")
+  end
+
+  def to_imp
+    impexify(@values.values)
+  end
+
+  private
+  def impexify(array)
+    CSV.generate_line([nil] + array + [nil], :col_sep => ";")
   end
 end

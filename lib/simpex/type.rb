@@ -1,16 +1,17 @@
 require 'rubygems'
-require 'fastercsv'
+require 'csv'
 
 class Type 
-  attr_reader :attributes, :entries
+  attr_reader :attributes, :entries, :name
 
   def  initialize(name, type_attributes, macros="")
     raise "Type name was not given, use e.g. 'Product'  or 'Category'" if name.empty?
-    raise ArgumentError.new("Attribute values must be ginen in an array, use '%w{code name description catalog}'") unless type_attributes.kind_of?(Array)
+    raise ArgumentError.new("Attribute values must be given in an array, use '%w{code name description catalog}'") unless type_attributes.kind_of?(Array)
     @macros = macros
     @attributes = type_attributes.reject{|e| e == ""} # Array of instance vars
     @name = name 
     @entries = []
+    @impex_command = "INSERT_UPDATE"
   end
 
   def <<(entry)
@@ -36,10 +37,24 @@ class Type
     end
   end
 
+  def to_imp
+    puts "impexifying #{self.inspect}"
+    result = ""
+    result << @macros
+    result << "\n" 
+    result << "\n" 
+    result << "#{@impex_command} #{@name}" +  impexify(@attributes)
+    result << "\n" 
+    @entries.each do |entry|
+      result << entry.to_imp
+    end
+    result
+  end
+
   private
   def impexify(array)
-    FasterCSV.generate_line([nil] + array + [nil], :col_sep => ";")
+    CSV.generate_line([nil] + array + [nil], :col_sep => ";")
   end
-  
+
 end
 

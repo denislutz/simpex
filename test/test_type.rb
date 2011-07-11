@@ -1,14 +1,12 @@
 require 'test/unit'
-require File.expand_path('type.rb',  'lib/simpex')
-require File.expand_path('type_entry.rb', 'lib/simpex')
+require File.expand_path('simpex.rb',  'lib')
+require 'fileutils'
 
 class TestType < Test::Unit::TestCase
-  #Sample Impex
   #
   #INSERT_UPDATE Category;code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];
   #;SampleCategory;SimpexProducts:Online;Testkategorie;Sample category;Dies ist eine Testkategorie;This is a sample category;
   # 
-  #
   #INSERT_UPDATE Product;code[unique=true];name[lang=en]; name[lang=de];unit(code);$catalogVersion; description[lang=en]; description[lang=de]; approvalStatus(code);supercategories(code)
   #;sampleproduct1;SampleProduct1;Testprodukt1;pieces;SimpexProducts:Online;"This is a sample product";"Dies ist ein Testprodukt";approved;SampleCategory
   #;sampleproduct2;SampleProduct2;Testprodukt2;pieces;SimpexProducts:Online;"This is another sample product";"Dies ist ein weiteres Testprodukt";approved;SampleCategory
@@ -61,5 +59,31 @@ class TestType < Test::Unit::TestCase
     assert_equal "myproduct555", entry.get("name[lang=en]")
     assert_equal "meinproduct555", entry.get("name[lang=de]")
     assert_equal "SampleCategory", entry.get("supercategories(code)")
+  end
+
+  def test_should_write_the_impex_resupt_to_the_given_folder
+
+    impex_dest_dir = "test/tmp"
+    FileUtils.mkdir(impex_dest_dir) unless Dir.exist?(impex_dest_dir)
+
+    result = ImpexResult.new(impex_dest_dir)
+
+    language_type = Type.new("Language", %w{isocode[unique=true] active})
+    language_type << TypeEntry.new(language_type, %w{de true})
+    language_type << TypeEntry.new(language_type, %w{en true})
+    result << language_type 
+
+    catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
+    catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
+    catalog_id = catalog.get("id[unique=true]")
+    catalog_type << catalog
+    result << catalog_type
+
+    catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
+    catalog_version = TypeEntry.new(catalog_version_type, [catalog_id, "online", "true", "EUR", "de,en"])
+    catalog_version_type << catalog_version
+    result << catalog_version_type 
+
+    result.impexify
   end
 end
