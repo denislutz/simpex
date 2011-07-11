@@ -40,9 +40,10 @@ class Type
   def to_imp
     puts "impexifying #{self.inspect}"
     result = ""
-    result << @macros
-    result << "\n" 
-    result << "\n" 
+    unless @macros.empty?
+      result << @macros
+      result << "\n" 
+    end
     result << "#{@impex_command} #{@name}" +  impexify(@attributes)
     result << "\n" 
     @entries.each do |entry|
