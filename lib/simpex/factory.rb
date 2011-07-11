@@ -16,7 +16,7 @@ class Factory
 #;$testProduct0-id;;$testProduct0-idde;$testProduct0-iden;pieces;157 EUR;approved;admin;0;$testCategory0-id
 #;$testProduct1-id;;$testProduct1-idde;$testProduct1-iden;pieces;157 EUR;approved;admin;0;$testCategory0-id,$testCategory1-id
 
-  def Factory.generate_base_catalog_setup(impex_dest_dir)
+  def Factory.generate_base_catalog_setup_to(impex_dest_dir)
     result = ImpexResult.new(impex_dest_dir)
 
     language_type = Type.new("Language", %w{isocode[unique=true] active})

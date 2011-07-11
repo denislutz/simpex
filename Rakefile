@@ -9,7 +9,7 @@ namespace :simpex do
   desc "Generates ImpEx file"
   task :generate do
     output_directory = "tmp"
-    Factory.generate_base_catalog_setup output_directory
+    Factory.generate_base_catalog_setup_to(output_directory)
     puts "Files generated inside #{output_directory}"
   end
 
