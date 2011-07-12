@@ -82,6 +82,12 @@ class TestType < Test::Unit::TestCase
     end
   end
 
+  def test_entry_should_match_nested_brakets_attributes
+    product_type = Type.new("Product", %w{code[unique=true] catalog(id)[unique=true]})
+    entry = TypeEntry.new(product_type, %w{555 myCatalogId})
+    assert_equal "myCatalogId", entry.catalog
+  end
+
   def test_entry_should_match_fuzzy_attribute_names_to_real_attributes
 
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})

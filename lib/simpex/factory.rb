@@ -25,12 +25,11 @@ class Factory
 
     catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
     catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
-    catalog_id = catalog.get("id[unique=true]")
     catalog_type << catalog
     result << catalog_type
 
     catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
-    catalog_version = TypeEntry.new(catalog_version_type, [catalog_id, "online", "true", "EUR", "de,en"])
+    catalog_version = TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR", "de,en"])
     catalog_version_type << catalog_version
     result << catalog_version_type 
 
@@ -47,20 +46,13 @@ class Factory
 
     catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
     catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
-    catalog_id = catalog.get("id[unique=true]")
     catalog_type << catalog
     result << catalog_type
 
     catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
-    catalog_version = TypeEntry.new(catalog_version_type, [catalog_id, "online", "true", "EUR"])
+    catalog_version = TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR"])
     catalog_version_type << catalog_version
     result << catalog_version_type 
-
-    #TODO let attributes match only with the core name, so catalog(id) => catalog
-    #catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
-    #catalog_version = TypeEntry.new(catalog_version_type, {"catalog" => catalog_id, "version" => "online", "active" => "true", "defaultCurrency" => "EUR", })
-    #catalog_version_type << catalog_version
-    #result << catalog_version_type 
 
     result.impexify
   end

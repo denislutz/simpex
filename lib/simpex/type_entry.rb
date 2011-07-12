@@ -27,7 +27,10 @@ class TypeEntry
       guessed_attribute_matches = attr_names.select{|e| e.split("(").first == attribute_name || e.split("[").first == attribute_name}
 
       if guessed_attribute_matches.size > 1
-        raise ArgumentError.new "There is more than one matching attribute name for the given name #{attribute_name}, matches are #{guessed_attribute_matches.inspect}"
+        error_msg = "There is more than one matching attribute name for the given 
+                        name #{attribute_name}, matches are #{guessed_attribute_matches.inspect}, 
+                      using of full attribute names is advised"
+        raise ArgumentError.new error_msg
       else
         guessed_attribute = guessed_attribute_matches.first
         if guessed_attribute
