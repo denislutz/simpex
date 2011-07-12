@@ -13,21 +13,23 @@ Simpex will make your life easier because:
 Ready? Here it comes:
 
 
-    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
 
-    entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
+entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
 
-    assert_equal "555", entry.code
+assert_equal "555", entry.code
 
-    assert_equal "pieces", entry.unit
+assert_equal "pieces", entry.unit
 
-    assert_equal "SampleCategory", entry.supercategories
+assert_equal "SampleCategory", entry.supercategories
+
 
 Just use full string attribute names for ambigious attributes like
 
-    assert_equal "myproduct555", entry.get("name[lang=en]")
 
-    assert_equal "meinproduct555", entry.get("name[lang=de]")
+assert_equal "myproduct555", entry.get("name[lang=en]")
+
+assert_equal "meinproduct555", entry.get("name[lang=de]")
 
 
 h2. Setup
