@@ -1,20 +1,4 @@
 class Factory 
-  #INSERT_UPDATE Currency;isocode[unique=true];name[lang=de];name[lang=en];active;base;conversion;digits;symbol
-  #;EUR;Euro;Euro;true;true;1;2;€
-  #;USD;US-Dollar;US Dollar;true;false;1,38;2;$
-  #
-  #INSERT_UPDATE Country;isocode[unique=true];name[lang=de];name[lang=en];active;
-  #;at;Österreich;Austria;true;
-  #;de;Deutschland;Germany;true;
-  #  
-  #INSERT_UPDATE Category;code[unique=true];$catalogversion;name[lang=de];name[lang=en];$supercategories
-  #;$testCategory0-id;;$testCategory0-id;$testCategory0-id;
-  #;$testCategory1-id;;$testCategory1-id;$testCategory1-id;$testCategory0-id
-  #
-  #INSERT_UPDATE Product;code[unique=true];$catalogversion;name[lang=de];name[lang=en];unit(code);$prices;approvalStatus(code);owner(Principal.uid);startLineNumber;$supercategories
-  #;$testProduct0-id;;$testProduct0-idde;$testProduct0-iden;pieces;157 EUR;approved;admin;0;$testCategory0-id
-  #;$testProduct1-id;;$testProduct1-idde;$testProduct1-iden;pieces;157 EUR;approved;admin;0;$testCategory0-id,$testCategory1-id
-
   def Factory.generate_base_catalog_setup_to_file(impex_dest_dir, result_file_name)
     result = ImpexResult.new(impex_dest_dir)
 
