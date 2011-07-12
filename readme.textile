@@ -76,8 +76,24 @@ You can find the generated file in 'tmp/'
 
 Run _rake simpex:test_ to execute all tests
 
-h2. Todo
 
+h2. Vision
+
+
+Map core hybris types in this API so you can create objects easilly and create impex without knowing its internals too much.
+
+So instead of writing:
+
+catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
+catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
+
+you will just write:
+
+Catalog.new("SimpexCatalog")
+
+creating a valid catalog objects that can be immidiatelly transformed to impex and inserted.
+
+h2. Todo
 
 
 h3. Impex Factory
