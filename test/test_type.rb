@@ -61,6 +61,14 @@ class TestType < Test::Unit::TestCase
     assert_equal "SampleCategory", entry.get("supercategories(code)")
   end
 
+  def test_entry_should_inforce_to_use_unique_attributes_if_needed_for_fuzzy_matching
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de]})
+    entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 })
+    assert_raise ArgumentError do
+      entry.get("name")
+    end
+  end
+
   def test_entry_should_match_fuzzy_attribute_names
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
@@ -74,16 +82,16 @@ class TestType < Test::Unit::TestCase
     end
   end
 
-  #def test_entry_should_match_fuzzy_attribute_names_to_real_attributes
+  def test_entry_should_match_fuzzy_attribute_names_to_real_attributes
 
-  #  product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
-  #  entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
 
-  #  assert_equal "555", entry.code
-  #  assert_equal "pieces", entry.unit
-  #  assert_equal "SampleCategory", entry.supercategories
+    assert_equal "555", entry.code
+    assert_equal "pieces", entry.unit
+    assert_equal "SampleCategory", entry.supercategories
 
-  #end
+  end
 
   def test_should_write_the_impex_resupt_to_the_given_folder
     impex_dest_dir = "test/tmp"

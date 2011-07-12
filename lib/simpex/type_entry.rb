@@ -23,13 +23,24 @@ class TypeEntry
     if attr_names.include?(attribute_name)
       @values[attribute_name]
     else
-      guessed_attribute = attr_names.find{|e| e.split("(").first == attribute_name || e.split("[").first == attribute_name}
-      if guessed_attribute
-        @values[guessed_attribute]
+
+      guessed_attribute_matches = attr_names.select{|e| e.split("(").first == attribute_name || e.split("[").first == attribute_name}
+
+      if guessed_attribute_matches.size > 1
+        raise ArgumentError.new "There is more than one matching attribute name for the given name #{attribute_name}, matches are #{guessed_attribute_matches.inspect}"
       else
-        raise ArgumentError.new "No attribte '#{attribute_name}' was found for the type entry, declared attributes: #{attr_names.inspect}"
+        guessed_attribute = guessed_attribute_matches.first
+        if guessed_attribute
+          @values[guessed_attribute]
+        else
+          raise ArgumentError.new "No attribte '#{attribute_name}' was found for the type entry, declared attributes: #{attr_names.inspect}"
+        end
       end
     end
+  end
+
+  def method_missing(id, *args)
+    self.get("#{id}")
   end
 
   def set(attributes)
