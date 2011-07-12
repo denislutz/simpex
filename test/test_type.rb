@@ -61,6 +61,30 @@ class TestType < Test::Unit::TestCase
     assert_equal "SampleCategory", entry.get("supercategories(code)")
   end
 
+  def test_entry_should_match_fuzzy_attribute_names
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
+
+    assert_equal "555", entry.get("code")
+    assert_equal "pieces", entry.get("unit")
+    assert_equal "SampleCategory", entry.get("supercategories")
+
+    assert_raise ArgumentError do
+      entry.get("supercat")
+    end
+  end
+
+  #def test_entry_should_match_fuzzy_attribute_names_to_real_attributes
+
+  #  product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+  #  entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
+
+  #  assert_equal "555", entry.code
+  #  assert_equal "pieces", entry.unit
+  #  assert_equal "SampleCategory", entry.supercategories
+
+  #end
+
   def test_should_write_the_impex_resupt_to_the_given_folder
     impex_dest_dir = "test/tmp"
     FileUtils.mkdir(impex_dest_dir) unless Dir.exist?(impex_dest_dir)
@@ -86,6 +110,7 @@ class TestType < Test::Unit::TestCase
 
   private 
   def standard_result(impex_dest_dir)
+
     result = ImpexResult.new(impex_dest_dir)
 
     language_type = Type.new("Language", %w{isocode[unique=true] active})

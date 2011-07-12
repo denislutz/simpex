@@ -18,8 +18,18 @@ class TypeEntry
     end
   end
 
-  def get(attribute)
-    @values[attribute]
+  def get(attribute_name)
+    attr_names = @values.keys
+    if attr_names.include?(attribute_name)
+      @values[attribute_name]
+    else
+      guessed_attribute = attr_names.find{|e| e.split("(").first == attribute_name || e.split("[").first == attribute_name}
+      if guessed_attribute
+        @values[guessed_attribute]
+      else
+        raise ArgumentError.new "No attribte '#{attribute_name}' was found for the type entry, declared attributes: #{attr_names.inspect}"
+      end
+    end
   end
 
   def set(attributes)
