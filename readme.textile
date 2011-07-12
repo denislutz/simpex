@@ -10,6 +10,23 @@ Simpex will make your life easier because:
 * do basic impex validations for you before hybris does it
 
 
+Ready? Here it comes:
+
+
+    @product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})@
+    @entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})@
+
+    @assert_equal "555", entry.code@
+    @assert_equal "pieces", entry.unit@
+    @assert_equal "SampleCategory", entry.supercategories@
+
+Just use full string attribute names for ambigious attributes like
+
+    @assert_equal "myproduct555", entry.get("name[lang=en]")@
+    @assert_equal "meinproduct555", entry.get("name[lang=de]")@
+
+
+
 h2. Setup
 
 rvm install 1.9.1
@@ -25,12 +42,6 @@ Run _rake simpex:test_ to execute all tests
 
 h2. Todo
 
-* cleanup
-
-
-h3. Different formats support
-
-make generation dynamic (what are we going to use a input format? yaml? json?)
 
 
 h3. Impex Factory
@@ -39,15 +50,6 @@ The impex factory for standard hybris types will make it possible to create a va
 so no impex knowledge is necessary at all. This is very convinient for hybris test fixtures setup and the initial product import.
 
 
-h3. Macros Library
-
-The macros library could be some small set of typical macros used in impex, something like:
-
-@$catalogversion=catalogversion(catalog(id[default='simpexproducts'])@
-
-created in ruby with 
-
-@Macros.catalog_version("simpexproducts")@
 
 
 h2. Features
