@@ -16,6 +16,7 @@ class TypeEntry
         @values[att] = values[index]
       end
     end
+    type << self
   end
 
   def get(attribute_name)

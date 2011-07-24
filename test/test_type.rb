@@ -125,24 +125,20 @@ class TestType < Test::Unit::TestCase
   private 
   def standard_result(impex_dest_dir)
 
-    result = ImpexResult.new(impex_dest_dir)
-
     language_type = Type.new("Language", %w{isocode[unique=true] active})
-    language_type << TypeEntry.new(language_type, %w{de true})
-    language_type << TypeEntry.new(language_type, %w{en true})
-    result << language_type 
+    TypeEntry.new(language_type, %w{de true})
+    TypeEntry.new(language_type, %w{en true})
 
     catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
     catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
-    catalog_id = catalog.get("id[unique=true]")
-    catalog_type << catalog
-    result << catalog_type
 
     catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
-    catalog_version = TypeEntry.new(catalog_version_type, [catalog_id, "online", "true", "EUR", "de,en"])
-    catalog_version_type << catalog_version
-    result << catalog_version_type 
+    TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR", "de,en"])
 
+    result = ImpexResult.new(impex_dest_dir)
+    result << language_type 
+    result << catalog_type
+    result << catalog_version_type 
     result
   end
 end
