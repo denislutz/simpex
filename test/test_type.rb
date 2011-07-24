@@ -32,17 +32,24 @@ class TestType < Test::Unit::TestCase
   end
 
   def test_should_create_a_type_entry
-    entry = TypeEntry.new(@product_type, {"code" => "333", "name" => "MyName"})
+    entry = TypeEntry.new(@product_type, {"code" => "333", "name[lang=de]" => "MyName"})
     @product_type << entry
     puts entry.inspect
   end
 
   def test_entry_should_reference_other_entries
-    entry = TypeEntry.new(@product_type, {"code" => "333", "name" => "MyName"})
+    entry = TypeEntry.new(@product_type, {"code" => "333", "name[lang=en]" => "MyName"})
     @product_type << entry
 
     assert_equal "333", entry.get("code")
-    assert_equal "MyName", entry.get("name")
+    assert_equal "MyName", entry.get("name[lang=en]")
+  end
+
+  def test_entry_should_validate_against_the_given_type_attributes
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de]})
+    assert_raise ArgumentError do
+      entry = TypeEntry.new(product_type, {"co" => "555"})
+    end
   end
 
   def test_should_fail_if_wrong_values_given
@@ -60,6 +67,7 @@ class TestType < Test::Unit::TestCase
     assert_equal "meinproduct555", entry.get("name[lang=de]")
     assert_equal "SampleCategory", entry.get("supercategories(code)")
   end
+
 
   def test_entry_should_inforce_to_use_unique_attributes_if_needed_for_fuzzy_matching
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de]})
