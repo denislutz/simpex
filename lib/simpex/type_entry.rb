@@ -23,6 +23,9 @@ class TypeEntry
         end
       end
     else 
+      if @type.attributes.size != values.size
+        raise ArgumentError.new "The number of given attributes is less then defined, expected are #{@type.attributes.inspect}" 
+      end
       @type.attributes.each_with_index do |att,index|
         set(att, values[index])
       end

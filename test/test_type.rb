@@ -37,6 +37,12 @@ class TestType < Test::Unit::TestCase
     puts entry.inspect
   end
 
+  def test_entry_should_verity_the_number_of_given_attributes
+    assert_raises ArgumentError do
+     entry = TypeEntry.new(@product_type, %w{66 myname myname pieces})
+    end
+  end
+
   def test_entry_should_reference_other_entries
     entry = TypeEntry.new(@product_type, {"code" => "333", "name[lang=en]" => "MyName"})
     @product_type << entry
@@ -151,7 +157,7 @@ class TestType < Test::Unit::TestCase
     catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
 
     catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
-    TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR", "de,en"])
+    TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR"])
 
     result = ImpexResult.new(impex_dest_dir)
     result << language_type 
