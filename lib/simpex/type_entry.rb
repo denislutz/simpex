@@ -75,7 +75,7 @@ class TypeEntry
       if guessed_attribute
         guessed_attribute
       else
-        raise ArgumentError.new "No attribte '#{att_name}' was found for the type entry, declared attributes: #{attr_names.inspect}"
+        raise ArgumentError.new "No attribte '#{att_name}' was found for the type '#{self.type.name}', declared attributes: #{attr_names.inspect}"
       end
     end
   end
