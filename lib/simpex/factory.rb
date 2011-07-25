@@ -26,7 +26,7 @@ class Factory
     TypeEntry.new(language_type, %w{en true})
 
     catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
-    TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
+    catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
 
     catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
     TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR"])

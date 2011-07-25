@@ -77,6 +77,16 @@ class TestType < Test::Unit::TestCase
     end
   end
 
+  def test_should_create_impex_list_from_array
+    catalog_version_type = Type.new("CatalogVersion", %w{languages(isocode)})
+
+    entry = TypeEntry.new(catalog_version_type, [%w{en de fr it}])
+    assert_equal "en,de,fr,it", entry.languages
+
+    entry2 = TypeEntry.new(catalog_version_type, [["en", nil, "it"]])
+    assert_equal "en,it", entry2.languages
+  end
+
   def test_entry_should_match_fuzzy_attribute_names
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})

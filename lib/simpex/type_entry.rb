@@ -19,12 +19,12 @@ class TypeEntry
       values.each do |key, value|
         real_att_name = guess_attribute(key)
         if real_att_name
-          @values[real_att_name] = value
+          set(real_att_name, value)
         end
       end
     else 
       @type.attributes.each_with_index do |att,index|
-        @values[att] = values[index]
+        set(att, values[index])
       end
     end
     type << self
@@ -45,6 +45,14 @@ class TypeEntry
 
   def set(attributes)
     @values.merge!(attributes)
+  end
+
+  def set(key, value)
+    if value.kind_of?(Array)
+      @values[key] = value.reject{|v| v.nil? || v.empty? }.join(",")
+    else
+      @values[key] = value
+    end
   end
 
   def to_imp
