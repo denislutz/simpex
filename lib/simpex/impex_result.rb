@@ -2,30 +2,40 @@ class ImpexResult
   def initialize(dest_folder)
     raise "No existing destination folder was given, make sure it exists" if dest_folder.nil? || !Dir.exist?(dest_folder)
     @dest_folder = dest_folder
-    @tables = []
+    @types = []
   end
 
   def <<(type)
-    @tables << type
+    @types << type
   end
 
   def impexify(result_file_name="")
     if result_file_name.empty?
-      @tables.each_with_index do |table, index|
-        file_name = "#{@dest_folder}/#{format_number(index)}_#{table.name.downcase}.csv"
+      @types.each_with_index do |type, index|
+        file_name = "#{@dest_folder}/#{format_number(index)}_#{type.name.downcase}.csv"
         File.open(file_name, 'w') do |f|
-          f.puts(table.to_imp)
+          f.puts(type.to_imp)
         end
       end
     else
       result_file_name = File.basename(result_file_name)
       file_name = "#{@dest_folder}/#{result_file_name}"
-      puts "give file for one summarized impex result at #{file_name}"
+      puts "writing complete result to the file #{file_name}"
       result_file_name = File.basename(result_file_name)
       raise "You gave the directory #{result_file_name} instead of a single file" if File.directory?(result_file_name)
       File.open(file_name, "w") do |f|
-        @tables.each do |table|
-          f.puts(table.to_imp)
+        all_macros = []
+        @types.each do |type|
+          type.macros.each do |macro|
+            all_macros << macro unless all_macros.include?(macro)
+          end
+        end
+        all_macros.each do |m|
+          f.puts m
+        end
+        f.puts "\n"
+        @types.each do |type|
+          f.puts(type.to_imp(false))
         end
       end
     end

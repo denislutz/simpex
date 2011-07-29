@@ -93,6 +93,22 @@ class TestType < Test::Unit::TestCase
     assert_equal "en,it", entry2.languages
   end
 
+  def test_should_resolve_nested_attribtutes_like_localized_names
+    #OLD product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de]})
+
+    name = {:name => {:lang => ["en", "de"]}}
+    product_type = Type.new("Product", ["code[unique=true]", name])
+    entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555})
+
+    assert_equal "meinproduct555", entry.get("name[lang=de]")
+    assert_equal "myproduct555", entry.get("name[lang=en]")
+  end
+
+  def test_should_add_a_unique_identifier_on_an_attribute_if_no_is_given
+    product_type = Type.new("Product", %w{code name[lang=en] name[lang=de]})
+    assert product_type.attributes.include?("code[unique=true]")
+  end
+
   def test_entry_should_match_fuzzy_attribute_names
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
