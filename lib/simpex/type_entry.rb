@@ -62,11 +62,16 @@ class TypeEntry
     impexify(@values.values)
   end
 
+  def cat_ver_specific(attr_name)
+    self.get(attr_name) + ":" + self.get("catalogversion")
+  end
+  
   private
-
   def guess_attribute(att_name)
     attr_names = @values.keys
-    guessed_attribute_matches = attr_names.select{|e| e.split("(").first == att_name || e.split("[").first == att_name}
+    guessed_attribute_matches = attr_names.select{|e| e.split("(").first == att_name || 
+                                                      e.split("[").first == att_name || 
+                                                      e.split("$").last == att_name }
 
     if guessed_attribute_matches.size > 1
       error_msg = "There is more than one matching attribute name for the given 

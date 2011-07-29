@@ -42,7 +42,7 @@ class Type
     result << "\n" 
     result
   end
-  
+
 
   private
 
