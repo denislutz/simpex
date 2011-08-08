@@ -28,6 +28,7 @@ class Type
 
   def to_imp(macros=true)
     result = ""
+    return result if @entries.empty?
     if (!@macros.empty? && macros)
       @macros.each do |macro|
         result << macro 

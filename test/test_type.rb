@@ -31,6 +31,10 @@ class TestType < Test::Unit::TestCase
     puts @category_type.inspect
   end
 
+  def test_type_should_generate_nothing_if_no_entries
+    assert_equal "", @product_type.to_imp(false)
+  end
+
   def test_should_create_a_type_entry
     entry = TypeEntry.new(@product_type, {"code" => "333", "name[lang=de]" => "MyName"})
     @product_type << entry
