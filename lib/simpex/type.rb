@@ -44,6 +44,11 @@ class Type
   end
 
 
+  def unregister_by(attribute, value)
+    self.entries.reject!{|entry| entry.send(attribute, value)}
+  end
+
+
   private
 
   def resolve_to_attributes(attrib)

@@ -111,6 +111,16 @@ class TestType < Test::Unit::TestCase
     #assert product_type.attributes.include?("code[unique=true]")
   end
 
+  def test_type_should_unregister_an_entry_by_attribute
+    product_type = Type.new("Product", %w{code})
+    entry = TypeEntry.new(product_type, %w{555 })
+
+    assert product_type.entries.one?{|e|e.code == "555"}
+    product_type.unregister_by("code", "555")
+    assert product_type.entries.none?{|e|e.code == "555"}
+  end
+  
+
   def test_entry_should_match_fuzzy_attribute_names
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
