@@ -127,10 +127,12 @@ class TestType < Test::Unit::TestCase
 
   def test_type_should_find_entry_by_attribute
     product_type = Type.new("Product", %w{code})
-    assert_nil product_type.find_by("code", "555") 
-    entry = TypeEntry.new(product_type, %w{555 })
+    assert product_type.find_by("code", "555").empty?
+    entry = TypeEntry.new(product_type, %w{555})
+    entry = TypeEntry.new(product_type, %w{555})
+    entry = TypeEntry.new(product_type, %w{556})
     found = product_type.find_by("code", "555")
-    assert found 
+    assert_equal 2, found.size 
   end
   
   def test_entry_should_match_fuzzy_attribute_names

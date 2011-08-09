@@ -53,18 +53,15 @@ class Type
     result
   end
 
-
   def unregister_by(attribute, value)
     self.entries.reject!{|entry| entry.send(attribute) == value}
   end
 
   def find_by(attribute, value)
-    self.entries.find{|entry| entry.send(attribute) == value}
+    self.entries.find_all{|entry| entry.send(attribute) == value}
   end
 
-
   private
-
   def resolve_to_attributes(attrib)
     raise "The feature of reading hashes of attrbite names is planned but not implemented yet, implement it here"
   end
