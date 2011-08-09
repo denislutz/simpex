@@ -55,7 +55,11 @@ class Type
 
 
   def unregister_by(attribute, value)
-    self.entries.reject!{|entry| entry.send(attribute, value)}
+    self.entries.reject!{|entry| entry.send(attribute) == value}
+  end
+
+  def find_by(attribute, value)
+    self.entries.find{|entry| entry.send(attribute) == value}
   end
 
 

@@ -124,8 +124,15 @@ class TestType < Test::Unit::TestCase
     product_type.unregister_by("code", "555")
     assert product_type.entries.none?{|e|e.code == "555"}
   end
-  
 
+  def test_type_should_find_entry_by_attribute
+    product_type = Type.new("Product", %w{code})
+    assert_nil product_type.find_by("code", "555") 
+    entry = TypeEntry.new(product_type, %w{555 })
+    found = product_type.find_by("code", "555")
+    assert found 
+  end
+  
   def test_entry_should_match_fuzzy_attribute_names
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, @macros)
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
