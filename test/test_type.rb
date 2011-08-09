@@ -3,20 +3,12 @@ require File.expand_path('simpex.rb',  'lib')
 require 'fileutils'
 
 class TestType < Test::Unit::TestCase
-  #
-  #INSERT_UPDATE Category;code[unique=true];$catalogVersion;name[lang=de];name[lang=en];description[lang=de];description[lang=en];
-  #;SampleCategory;SimpexProducts:Online;Testkategorie;Sample category;Dies ist eine Testkategorie;This is a sample category;
-  # 
-  #INSERT_UPDATE Product;code[unique=true];name[lang=en]; name[lang=de];unit(code);$catalogVersion; description[lang=en]; description[lang=de]; approvalStatus(code);supercategories(code)
-  #;sampleproduct1;SampleProduct1;Testprodukt1;pieces;SimpexProducts:Online;"This is a sample product";"Dies ist ein Testprodukt";approved;SampleCategory
-  #;sampleproduct2;SampleProduct2;Testprodukt2;pieces;SimpexProducts:Online;"This is another sample product";"Dies ist ein weiteres Testprodukt";approved;SampleCategory
-
   def setup
-    macros = "$catalogversion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']"
+    @macros = "$catalogVersion=catalogversion(catalog(id[default='simpexproducts']), version[default='staged'])[unique=true,default='simpexproducts:staged']"
 
-    @category_type = Type.new("Category", %w{code[unique=true] $catalogVersion name[lang=de] name[lang=en]}, macros)
+    @category_type = Type.new("Category", %w{code[unique=true] $catalogVersion name[lang=de] name[lang=en]}, @macros)
 
-    @product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, macros)
+    @product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, @macros)
   end
 
   def test_validate_type_input_on_creation
@@ -29,6 +21,15 @@ class TestType < Test::Unit::TestCase
     assert_not_nil @category_type.attributes
     assert_not_nil @category_type.entries
     puts @category_type.inspect
+  end
+
+  def test_type_should_validate_the_presence_of_macros
+    assert_raises ArgumentError do
+      Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    end
+
+    macros = ["$catalogVersion=adsfasdfasdf"]
+    Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, macros)
   end
 
   def test_type_should_generate_nothing_if_no_entries
@@ -126,7 +127,7 @@ class TestType < Test::Unit::TestCase
   
 
   def test_entry_should_match_fuzzy_attribute_names
-    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, @macros)
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
 
     assert_equal "555", entry.get("code")
@@ -145,7 +146,7 @@ class TestType < Test::Unit::TestCase
   end
 
   def test_entry_should_give_catalog_version_specific_attributes
-    product_type = Type.new("Product", %w{code[unique=true] $catalogversion})
+    product_type = Type.new("Product", %w{code[unique=true] $catalogVersion}, @macros)
     entry = TypeEntry.new(product_type, %w{555 myCatalogId:staged })
     assert_equal "555:myCatalogId:staged", entry.cat_ver_specific("code")
 
@@ -157,14 +158,14 @@ class TestType < Test::Unit::TestCase
   end
 
   def test_entry_should_match_macro_attributes
-    product_type = Type.new("Product", %w{code[unique=true] $catalog})
+    product_type = Type.new("Product", %w{code[unique=true] $catalogVersion},"$catalogVersion=asdfadsfasdfasdf")
     entry = TypeEntry.new(product_type, %w{555 myCatalogId})
-    assert_equal "myCatalogId", entry.catalog
+    assert_equal "myCatalogId", entry.catalogVersion
   end
 
   def test_entry_should_match_fuzzy_attribute_names_to_real_attributes
 
-    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, @macros)
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
 
     assert_equal "555", entry.code

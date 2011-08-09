@@ -7,7 +7,11 @@ class Type
   def  initialize(name, type_attributes, macros=[])
     raise "Type name was not given, use e.g. 'Product'  or 'Category'" if name.empty?
     raise ArgumentError.new("Attribute values must be given in an array, use '%w{code name description catalog}'") unless type_attributes.kind_of?(Array)
-    @macros = macros
+    if macros.kind_of? String
+      @macros = [macros]
+    else
+      @macros = macros
+    end
     @attributes = []
     type_attributes.each do |attribute|
       next if attribute.nil? || attribute.empty?
@@ -15,6 +19,11 @@ class Type
         @attributes += resolve_to_attributes(attribute)
       else
         @attributes << attribute
+        if attribute =~ /^\$/
+          if @macros.empty? || @macros.none?{|m| m.split("=").first == attribute}
+            raise ArgumentError.new "You are using a macro that is not defined: #{attribute}, declared macros are #{@macros}" 
+          end
+        end
       end
     end
     @name = name 

@@ -63,7 +63,7 @@ class TypeEntry
   end
 
   def cat_ver_specific(attr_name)
-    self.get(attr_name) + ":" + self.get("catalogversion")
+    self.get(attr_name) + ":" + self.get("catalogVersion")
   end
   
   private
