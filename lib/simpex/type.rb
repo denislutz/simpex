@@ -2,7 +2,8 @@ require 'rubygems'
 require 'csv'
 
 class Type 
-  attr_reader :attributes, :entries, :name, :macros
+  attr_reader :attributes, :entries, :name, :macros, :impex_command
+  attr_writer :impex_command
 
   def  initialize(name, type_attributes, macros=[])
     raise "Type name was not given, use e.g. 'Product'  or 'Category'" if name.empty?

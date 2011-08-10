@@ -17,6 +17,12 @@ class TestType < Test::Unit::TestCase
     end
   end
 
+  def test_should_have_setter_getter_for_impex_command
+    assert_equal "INSERT_UPDATE", @product_type.impex_command
+    @product_type.impex_command = "update"
+    assert_equal "update", @product_type.impex_command
+  end
+
   def test_should_create_a_type
     assert_not_nil @category_type.attributes
     assert_not_nil @category_type.entries
