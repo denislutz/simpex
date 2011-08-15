@@ -13,8 +13,10 @@ class ImpexResult
     if result_file_name.empty?
       @types.each_with_index do |type, index|
         file_name = "#{@dest_folder}/#{format_number(index)}_#{type.name.downcase}.csv"
-        File.open(file_name, 'w') do |f|
-          f.puts(type.to_imp)
+        unless type.empty?
+          File.open(file_name, 'w') do |f|
+            f.puts type.to_imp 
+          end
         end
       end
     else
@@ -35,7 +37,7 @@ class ImpexResult
         end
         f.puts "\n"
         @types.each do |type|
-          f.puts(type.to_imp(false))
+          f.puts type.to_imp(false) unless type.empty?
         end
       end
     end
@@ -45,3 +47,4 @@ class ImpexResult
     "%0#{numeric_positions}d" % number_to_format
   end
 end
+

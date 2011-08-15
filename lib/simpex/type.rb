@@ -36,6 +36,10 @@ class Type
     @entries << entry
   end
 
+  def empty?
+    self.entries.empty?
+  end
+
   def to_imp(macros=true)
     result = ""
     return result if @entries.empty?
