@@ -1,6 +1,6 @@
 class ImpexResult 
   def initialize(dest_folder)
-    raise "No existing destination folder was given, make sure it exists" if dest_folder.nil? || !Dir.exist?(dest_folder)
+    raise "Given dest folder #{dest_folder} is either nil or does not exist!" if dest_folder.nil? || !Dir.exist?(dest_folder)
     @dest_folder = dest_folder
     @types = []
   end
