@@ -13,6 +13,7 @@ class ImpexResult
     if result_file_name.empty?
       @types.each_with_index do |type, index|
         file_name = "#{@dest_folder}/#{format_number(index)}_#{type.name.downcase}.csv"
+        puts "writing #{type.name} to #{file_name}"
         unless type.empty?
           File.open(file_name, 'w') do |f|
             f.puts type.to_imp 
