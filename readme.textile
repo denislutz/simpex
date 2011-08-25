@@ -1,0 +1,109 @@
+h1. Simpex – Ruby library for simple ImpEx generation
+
+The impex torture is over guys! Enjoy your hybris projects with a nice ruby api for impex generation!
+
+Simpex will make your life easier because:
+
+* it will remove the "csv noise" from your eyes
+* let you focus on the important stuff, building relationships between your impex tables
+* process any incoming format like xml, excel, csv with the power of ruby
+* do basic impex validations for you before hybris does it
+
+
+Ready? Here it comes:
+
+
+product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+
+product = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
+
+assert_equal "555", product.code
+
+assert_equal "pieces", product.unit
+
+assert_equal "SampleCategory", product.supercategories
+
+
+
+Never worry about the order of rows any more just create a hash specifying the attributes:
+
+product2 = TypeEntry.new(product_type, {"code" => "333", "name" => "MyName"})
+
+
+Just use full string attribute names for ambigious attributes like
+
+
+assert_equal "myproduct555", product.get("name[lang=en]")
+
+assert_equal "meinproduct555", product.get("name[lang=de]")
+
+
+Now lets build some real references:
+
+catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
+catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
+
+catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
+catalog_version = TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR", "de,en"])
+
+
+Now add averything to a main object managing the files creation:
+
+result = ImpexResult.new("your/impex/folder")
+
+catalog_type << catalog
+product_type << product
+
+result << catalog_type
+result << product_type
+
+result.impexify # => will write separate files for each type 
+result.impexify("basic_setup.csv") # => will write all tables to one file in the folder your/impex/folder
+
+
+Thats it!
+
+h2. Setup
+
+rvm install 1.9.1
+cd to directory and run _bundle install_
+
+h2. ImpEx file generation
+
+For now it only generates a dummy ImpEx file.
+Run _rake simpex:generate_
+You can find the generated file in 'tmp/'
+
+Run _rake simpex:test_ to execute all tests
+
+
+h2. Vision
+
+
+Map core hybris types in this API so you can create objects easilly and create impex without knowing its internals too much.
+
+So instead of writing:
+
+catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
+catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
+
+you will just write:
+
+Catalog.new("SimpexCatalog")
+
+creating a valid catalog objects that can be immidiatelly transformed to impex and inserted.
+
+h2. Todo
+
+
+h3. Impex Factory
+
+The impex factory for standard hybris types will make it possible to create a valid hybris db setup only with ruby, 
+so no impex knowledge is necessary at all. This is very convinient for hybris test fixtures setup and the initial product import.
+
+
+
+
+h2. Features
+
+* we might want to use this https://github.com/aeden/activewarehouse-etl at some point for data extraction from different sources

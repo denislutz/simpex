@@ -2,8 +2,8 @@ require 'rubygems'
 require 'csv'
 
 class Type 
-  attr_reader :attributes, :entries, :name, :macros, :impex_command, :impex_result
-  attr_writer :impex_command, :impex_result, :memory_safe
+  attr_reader :attributes, :entries, :name, :macros, :impex_command
+  attr_writer :impex_command
 
   def  initialize(name, type_attributes, macros=[])
     raise "Type name was not given, use e.g. 'Product'  or 'Category'" if name.empty?
@@ -30,18 +30,10 @@ class Type
     @name = name 
     @entries = []
     @impex_command = "INSERT_UPDATE"
-    @impex_result = nil
-    @memory_safe = false
   end
-
 
   def <<(entry)
     @entries << entry
-    if @impex_result 
-      @impex_result.add_entries_number(1)
-    elsif @memory_safe
-      raise "impex result object is not set, but we are running in a memory safe impex generation"
-    end
   end
 
   def empty?

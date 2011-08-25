@@ -29,22 +29,6 @@ class TestResult < Test::Unit::TestCase
     assert File.exist?(@result_file_path), "the file #{@result_file_path} should have been created"
   end
 
-  def test_should_impexify_after_growing_to_certain_size
-    result = ImpexResult.new(@impex_dest_dir)
-    result << @category_type 
-    result << @product_type 
-
-    5000.times do |index| 
-      if index == 500
-        assert_equal 500, result.global_enties_number
-      end
-      TypeEntry.new(@product_type, %w{555 myproduct555})
-    end
-
-    5000.times do |index| 
-      TypeEntry.new(@category_type, %w{555 myproduct555})
-    end
-  end
   def teardown
     #File.delete(@result_file_path)
   end
