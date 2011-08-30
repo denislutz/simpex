@@ -2,8 +2,8 @@ require 'rubygems'
 require 'csv'
 
 class Type 
-  attr_reader :attributes, :entries, :name, :macros, :impex_command, :impex_result
-  attr_writer :impex_command, :impex_result, :memory_safe
+  attr_reader :attributes, :entries, :name, :macros, :impex_command, :impex_result, :after_each
+  attr_writer :impex_command, :impex_result, :memory_safe, :after_each
 
   def  initialize(name, type_attributes, macros=[])
     raise "Type name was not given, use e.g. 'Product'  or 'Category'" if name.empty?
@@ -32,8 +32,9 @@ class Type
     @impex_command = "INSERT_UPDATE"
     @impex_result = nil
     @memory_safe = false
+    @after_each = []
+    @before_each = []
   end
-
 
   def <<(entry)
     @entries << entry
@@ -59,10 +60,20 @@ class Type
       result << "\n" 
     end
     result << "#{@impex_command} #{@name}" +  impexify(@attributes)
+    unless after_each.empty?
+      result << "\"#%afterEach:\n" 
+      after_each.each do |bash_line|
+        result << bash_line << "\n"
+      end
+      result << "\"\n" 
+    end
     @entries.each do |entry|
       result << entry.to_imp
     end
     result << "\n" 
+    unless after_each.empty?
+      result << "\"#%afterEach:end\"" 
+    end
     result
   end
 

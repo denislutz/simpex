@@ -38,6 +38,17 @@ class TestType < Test::Unit::TestCase
     Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, macros)
   end
 
+  def test_shoud_add_an_after_each_statement
+      bash_script = "#%afterEach: "
+      after_each = "impex.getLastImportedItem().setApprovalStatus(impex.getLastImportedItem().getBaseProduct().getApprovalStatus());" 
+      product_type = Type.new("Product", %w{code[unique=true] name[lang=en]})
+      TypeEntry.new(product_type,%w{ 666 denis})
+      product_type.after_each << after_each
+      assert_match /impex/, product_type.after_each.first
+      assert_match /#%afterEach/, product_type.to_imp
+      puts product_type.to_imp
+  end
+
   def test_type_should_generate_nothing_if_no_entries
     assert_equal "", @product_type.to_imp(false)
   end
