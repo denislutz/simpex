@@ -8,6 +8,8 @@ class Type
   def  initialize(name, type_attributes, macros=[])
     raise "Type name was not given, use e.g. 'Product'  or 'Category'" if name.empty?
     raise ArgumentError.new("Attribute values must be given in an array, use '%w{code name description catalog}'") unless type_attributes.kind_of?(Array)
+    raise "Macros was given but is nil" if macros.nil?
+
     if macros.kind_of? String
       @macros = [macros]
     else
