@@ -12,7 +12,6 @@ Simpex will make your life easier because:
 * generate the right files names with right index numbers so hyris can process them in the right order
 * simpex is bullet proof and was used and developed for a huge ecommerce project in cooperation with namics.com
 
-
 Ready? Here it comes:
 
 product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
@@ -26,14 +25,11 @@ assert_equal "pieces", product.unit
 assert_equal "SampleCategory", product.supercategories
 
 
-
 Never worry about the order of rows any more just create a hash specifying the attributes:
 
 product2 = TypeEntry.new(product_type, {"code" => "333", "name" => "MyName"})
 
-
 Just use full string attribute names for ambigious attributes like
-
 
 assert_equal "myproduct555", product.get("name[lang=en]")
 
