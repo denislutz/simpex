@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Simpex::VERSION
   s.authors     = ["Denis Lutz"]
   s.email       = ["denis.lutz@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/denislutz/simpex"
   s.summary     = %q{Simpex is gem to confortably create hybris impex format files in an object oriented way.}
-  s.description = %q{Simpex is gem to confortably create hybris impex format files in an object oriented way.}
+  s.description = %q{Read more details at the homepage https://github.com/denislutz/simpex}
 
   s.rubyforge_project = "simpex"
 
