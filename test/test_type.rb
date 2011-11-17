@@ -115,24 +115,6 @@ class TestType < Test::Unit::TestCase
     assert_equal "en,it", entry2.languages
   end
 
-  def test_should_resolve_nested_attribtutes_like_localized_names
-    #OLD product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de]})
-
-    #TODO implement this feature
-    #name = {:name => {:lang => ["en", "de"]}}
-    #product_type = Type.new("Product", ["code[unique=true]", name])
-    #entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555})
-
-    #assert_equal "meinproduct555", entry.get("name[lang=de]")
-    #assert_equal "myproduct555", entry.get("name[lang=en]")
-  end
-
-  def test_should_add_a_unique_identifier_on_an_attribute_if_no_is_given
-    #TODO implement this feature
-    #product_type = Type.new("Product", %w{code name[lang=en] name[lang=de]})
-    #assert product_type.attributes.include?("code[unique=true]")
-  end
-
   def test_type_should_unregister_an_entry_by_attribute
     product_type = Type.new("Product", %w{code})
     entry = TypeEntry.new(product_type, %w{555 })
@@ -151,7 +133,7 @@ class TestType < Test::Unit::TestCase
     found = product_type.find_by("code", "555")
     assert_equal 2, found.size 
   end
-  
+
   def test_entry_should_match_fuzzy_attribute_names
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, @macros)
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
@@ -190,14 +172,12 @@ class TestType < Test::Unit::TestCase
   end
 
   def test_entry_should_match_fuzzy_attribute_names_to_real_attributes
-
     product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, @macros)
     entry = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
 
     assert_equal "555", entry.code
     assert_equal "pieces", entry.unit
     assert_equal "SampleCategory", entry.supercategories
-
   end
 
   def test_should_write_the_impex_resupt_to_the_given_folder

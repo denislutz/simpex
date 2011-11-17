@@ -1,0 +1,3 @@
+INSERT_UPDATE Catalog;id[unique=true];name[lang=de];name[lang=en];defaultCatalog;
+;simpex_catalog;SimpexCatalog;SimpexCatalog;true;
+

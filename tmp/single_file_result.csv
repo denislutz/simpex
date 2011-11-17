@@ -1,0 +1,10 @@
+INSERT_UPDATE Language;isocode[unique=true];active;
+;de;true;
+;en;true;
+
+INSERT_UPDATE Catalog;id[unique=true];name[lang=de];name[lang=en];defaultCatalog;
+;simpex_catalog;SimpexCatalog;SimpexCatalog;true;
+
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;defaultCurrency(isocode);
+;simpex_catalog;online;true;EUR;
+

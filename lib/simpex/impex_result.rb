@@ -1,4 +1,4 @@
-class ImpexResult 
+class ImpexResult
 
   attr_writer :memory_safe, :max_type_entries_in_tree
 
