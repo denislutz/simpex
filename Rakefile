@@ -1,5 +1,6 @@
-require File.expand_path('simpex.rb', 'lib')
+require "bundler/gem_tasks"
 require 'rake/testtask'
+require File.expand_path('simpex.rb', 'lib')
 
 require 'rubygems'
 
