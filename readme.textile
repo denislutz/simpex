@@ -19,9 +19,7 @@ product_type = Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=
 product = TypeEntry.new(product_type, %w{555 myproduct555 meinproduct555 pieces SimpexProducts:Online SampleCategory})
 
 assert_equal "555", product.code
-
 assert_equal "pieces", product.unit
-
 assert_equal "SampleCategory", product.supercategories
 
 
@@ -29,35 +27,32 @@ Never worry about the order of rows any more just create a hash specifying the a
 
 product2 = TypeEntry.new(product_type, {"code" => "333", "name" => "MyName"})
 
+
 Just use full string attribute names for ambigious attributes like
 
 assert_equal "myproduct555", product.get("name[lang=en]")
-
 assert_equal "meinproduct555", product.get("name[lang=de]")
 
 
 Now lets build some real references:
 
 catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
+#now create a catalog, by giving the type 'catalog_type' to the constructor, it will be registered for the future generation
 catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
 
 catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
 catalog_version = TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR", "de,en"])
 
-
 Now add averything to a main object managing the files creation:
-
 result = ImpexResult.new("your/impex/folder")
 
-catalog_type << catalog
-product_type << product
-
+#Each type, containts all the entries for this type, so entries are listed there for generation, now you just have to add the types to the result
 result << catalog_type
 result << product_type
 
+#now lets generated the result, memory leaks will be avoiaded by not exeeding more than 2000 entries in a type
 result.impexify # => will write separate files for each type 
 result.impexify("basic_setup.csv") # => will write all tables to one file in the folder your/impex/folder
-
 
 Thats it!
 
