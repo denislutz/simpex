@@ -52,7 +52,7 @@ class TypeEntry
 
   def set(key, value)
     if value.kind_of?(Array)
-      @values[key] = value.reject{|v| v.nil? || v.empty? }.join(",")
+      @values[key] = value.reject{|v| v.nil?}.join(",")
     else
       @values[key] = value
     end

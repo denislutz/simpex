@@ -39,14 +39,14 @@ class TestType < Test::Unit::TestCase
   end
 
   def test_shoud_add_an_after_each_statement
-      bash_script = "#%afterEach: "
-      after_each = "impex.getLastImportedItem().setApprovalStatus(impex.getLastImportedItem().getBaseProduct().getApprovalStatus());" 
-      product_type = Type.new("Product", %w{code[unique=true] name[lang=en]})
-      TypeEntry.new(product_type,%w{ 666 denis})
-      product_type.after_each << after_each
-      assert_match /impex/, product_type.after_each.first
-      assert_match /#%afterEach/, product_type.to_imp
-      puts product_type.to_imp
+    bash_script = "#%afterEach: "
+    after_each = "impex.getLastImportedItem().setApprovalStatus(impex.getLastImportedItem().getBaseProduct().getApprovalStatus());" 
+    product_type = Type.new("Product", %w{code[unique=true] name[lang=en]})
+    TypeEntry.new(product_type,%w{ 666 denis})
+    product_type.after_each << after_each
+    assert_match /impex/, product_type.after_each.first
+    assert_match /#%afterEach/, product_type.to_imp
+    puts product_type.to_imp
   end
 
   def test_type_should_generate_nothing_if_no_entries
@@ -63,6 +63,11 @@ class TestType < Test::Unit::TestCase
     assert_raises ArgumentError do
       entry = TypeEntry.new(@product_type, %w{66 myname myname pieces})
     end
+  end
+
+  def test_entry_should_handle_array_containnig_specific_types
+    some_type = Type.new('SomeType', %w{code some_list_attribute})
+    entry = TypeEntry.new(some_type, ["66", [1,2,3,4]])
   end
 
   def test_entry_should_reference_other_entries
