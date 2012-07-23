@@ -25,7 +25,7 @@ class TestResult < Test::Unit::TestCase
     result = ImpexResult.new(@impex_dest_dir)
     result << @category_type 
     result << @product_type 
-    result.impexify("result.csv")
+    result.impexify("result.csv", false)
     assert File.exist?(@result_file_path), "the file #{@result_file_path} should have been created"
   end
 

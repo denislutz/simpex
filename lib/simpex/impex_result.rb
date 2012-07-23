@@ -23,9 +23,9 @@ class ImpexResult
     check_for_impexify
   end
 
-  def impexify(result_file_name="", time_stampify = true)
+  def impexify(result_file_name="", time_stampify = false)
+    stamp = Time.now.strftime("%S_%M_%H_%d_%m_%Y") if time_stampify
     if result_file_name.empty?
-      stamp = Time.now.strftime("%S_%M_%H_%d_%m_%Y") if time_stampify
       @types.each_with_index do |type, index|
         if time_stampify
           file_name = "#{@dest_folder}/#{format_number(@impexify_occurences)}_#{type.name.downcase}_#{stamp}.csv"
@@ -42,7 +42,11 @@ class ImpexResult
       end
     else
       result_file_name = File.basename(result_file_name)
-      file_name = "#{@dest_folder}/#{result_file_name}"
+      if time_stampify
+        file_name = "#{@dest_folder}/#{stamp}_#{result_file_name}"
+      else
+        file_name = "#{@dest_folder}/#{result_file_name}"
+      end
       puts "writing complete result to the file #{file_name}"
       result_file_name = File.basename(result_file_name)
       raise "You gave the directory #{result_file_name} instead of a single file" if File.directory?(result_file_name)
