@@ -38,6 +38,15 @@ class TestType < Test::Unit::TestCase
     Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)}, macros)
   end
 
+  def test_type_should_validate_the_presence_of_macros_handling_the_unique_propery
+    assert_raises ArgumentError do
+      Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    end
+
+    macros = ["$catalogVersion=adsfasdfasdf"]
+    Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion[unique=true] supercategories(code)}, macros)
+  end
+
   def test_shoud_add_an_after_each_statement
     bash_script = "#%afterEach: "
     after_each = "impex.getLastImportedItem().setApprovalStatus(impex.getLastImportedItem().getBaseProduct().getApprovalStatus());" 

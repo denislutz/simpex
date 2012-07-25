@@ -23,7 +23,7 @@ class Type
       else
         @attributes << attribute
         if attribute =~ /^\$/
-          if @macros.empty? || @macros.none?{|m| m.split("=").first == attribute}
+          if @macros.empty? || @macros.none?{|m| m.split("=").first == attribute.split("[").first}
             raise ArgumentError.new "You are using a macro that is not defined: #{attribute}, declared macros are #{@macros}" 
           end
         end
