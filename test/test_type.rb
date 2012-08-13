@@ -43,8 +43,21 @@ class TestType < Test::Unit::TestCase
       Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
     end
 
-    macros = ["$catalogVersion=adsfasdfasdf"]
+    macros = ["$catalogVersion=adsfasdfasdf", "$contentCV=someValue"]
+    Type.new("MediaReference", %w{uid[unique=true] name referencedDamMedia(code,$contentCV)[lang=$lang] altText[lang=$lang] $contentCV[unique=true]}, macros)
     Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion[unique=true] supercategories(code)}, macros)
+  end
+
+  def test_type_should_validate_the_presence_of_macros_if_no_macros_are_given
+    assert_raises ArgumentError do
+      Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVersion supercategories(code)})
+    end
+    assert_raises ArgumentError do
+        macros = ["$catalogVersion=adsfasdfasdf"]
+        Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVe[unique=true] supercategories(code)}, macros)
+    end
+    macros = ["$catalogVe=adsfasdfasdf"]
+    Type.new("Product", %w{code[unique=true] name[lang=en] name[lang=de] unit(code) $catalogVe[unique=true] supercategories(code)}, macros)
   end
 
   def test_shoud_add_an_after_each_statement
