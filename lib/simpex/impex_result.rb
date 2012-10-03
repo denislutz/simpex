@@ -25,22 +25,50 @@ class ImpexResult
 
   def impexify(result_file_name="", time_stampify = false)
     stamp = Time.now.strftime("%S_%M_%H_%d_%m_%Y") if time_stampify
+    validate_macros
     if result_file_name.empty?
-      @types.each_with_index do |type, index|
-        if time_stampify
-          file_name = "#{@dest_folder}/#{format_number(@impexify_occurences)}_#{type.name.downcase}_#{stamp}.csv"
-        else
-          file_name = "#{@dest_folder}/#{format_number(@impexify_occurences)}_#{type.name.downcase}.csv"
-        end
-        unless type.empty?
-          puts "writing #{type.name} to #{file_name}"
-          File.open(file_name, 'w') do |f|
-            f.puts type.to_imp 
-          end
-          @impexify_occurences += 1
-        end
-      end
+      write_file_for_each_type(stamp, time_stampify)
     else
+      write_result_to_one_file(result_file_name, stamp, time_stampify)
+    end
+    clean_all_type_entries
+  end 
+
+  def format_number(number_to_format, numeric_positions="4")
+    "%0#{numeric_positions}d" % number_to_format
+  end
+
+  def global_enties_number 
+    @global_enties_number
+  end
+
+  def add_entries_number(added_number)
+    @global_enties_number +=added_number
+    check_for_impexify 
+  end
+
+  private
+  def validate_macros
+    
+    #collect all macros from all types
+    @macros = @types.inject([]) do |result, type|
+      puts type.name
+      type.macros.each do |macro|
+        puts macro
+        result << macro unless result.include?(macro)
+      end
+      result
+    end
+
+    #make sure each macro is used in at least one type
+    @macros.each do |macro|
+      if @types.none? {|type| type.attributes.include?(macro)}
+        raise ArgumentError.new "the macro #{macro} is never used in all declared types"
+      end
+    end
+  end
+  def write_result_to_one_file(result_file_name, stamp, time_stampify)
+      #will write the complete result to one file
       result_file_name = File.basename(result_file_name)
       if time_stampify
         file_name = "#{@dest_folder}/#{stamp}_#{result_file_name}"
@@ -67,36 +95,35 @@ class ImpexResult
       end
       @impexify_occurences += 1
     end
-    clean_all_type_entries
-  end 
-
-  def format_number(number_to_format, numeric_positions="4")
-    "%0#{numeric_positions}d" % number_to_format
-  end
-
-  def global_enties_number 
-    @global_enties_number
-  end
-
-  def add_entries_number(added_number)
-    @global_enties_number +=added_number
-    check_for_impexify 
-  end
-
-  private
-  def clean_all_type_entries
-    @types.each do |type|
-      type.entries.clear
+    def write_file_for_each_type(stamp, time_stampify)
+      @types.each_with_index do |type, index|
+        if time_stampify
+          file_name = "#{@dest_folder}/#{format_number(@impexify_occurences)}_#{type.name.downcase}_#{stamp}.csv"
+        else
+          file_name = "#{@dest_folder}/#{format_number(@impexify_occurences)}_#{type.name.downcase}.csv"
+        end
+        unless type.empty?
+          puts "writing #{type.name} to #{file_name}"
+          File.open(file_name, 'w') do |f|
+            f.puts type.to_imp 
+          end
+          @impexify_occurences += 1
+        end
+      end
     end
-    @global_enties_number = 0
-  end
-  def check_for_impexify
-    if @memory_safe
-      if  @global_enties_number > @max_type_entries_in_tree
-        puts "impexifying all entries since global entries #{@global_enties_number} is bigger then max #{@max_type_entries_in_tree}"
-        self.impexify 
+    def clean_all_type_entries
+      @types.each do |type|
+        type.entries.clear
+      end
+      @global_enties_number = 0
+    end
+    def check_for_impexify
+      if @memory_safe
+        if  @global_enties_number > @max_type_entries_in_tree
+          puts "impexifying all entries since global entries #{@global_enties_number} is bigger then max #{@max_type_entries_in_tree}"
+          self.impexify 
+        end
       end
     end
   end
-end
 
