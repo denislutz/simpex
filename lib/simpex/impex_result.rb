@@ -26,7 +26,7 @@ class ImpexResult
 
   def impexify(result_file_name="", time_stampify = false)
     stamp = Time.now.strftime("%S_%M_%H_%d_%m_%Y") if time_stampify
-    validate_macros
+    #validate_macros
     if result_file_name.empty?
       write_file_for_each_type(stamp, time_stampify)
     else
