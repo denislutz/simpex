@@ -28,20 +28,17 @@ class TestResult < Test::Unit::TestCase
 
   def test_should_recognize_not_used_macros
     macros = []
-    macros << "$firstmacro"
-    macros << "$secondmacro"
+    macros << "$variableUsedByMacros=someThing()"
+    macros << "$firstmacro=catalogversion[unique=true,default=$variableUsedByMacros:Staged]"
+    macros << "$secondmacro=something"
 
     @category_type = Type.new("Category", %w{code[unique=true] name[lang=de]}, macros)
     @product_type = Type.new("Product", %w{code[unique=true] name[lang=en]}, macros)
-
     result = ImpexResult.new(@impex_dest_dir)
     result << @category_type 
     result << @product_type
-
-
     entry = TypeEntry.new(@product_type, %w{555 myproduct555})
     entry = TypeEntry.new(@category_type, %w{555 mycategory})
-
     assert_raises ArgumentError do
       result.impexify("result.csv", false)
     end 
@@ -55,12 +52,15 @@ class TestResult < Test::Unit::TestCase
       result.impexify("result.csv", false)
     end
 
+    macros << "$neverUsed=someThing()"
     @product_type = Type.new("Product", %w{code[unique=true] name[lang=en] $firstmacro}, macros)
     @category_type = Type.new("Category", %w{code[unique=true] name[lang=de] $secondmacro}, macros)
     result = ImpexResult.new(@impex_dest_dir)
     result << @category_type 
     result << @product_type
-    result.impexify("result.csv", false)
+    assert_raises ArgumentError do
+        result.impexify("result.csv", false)
+    end
   end
 
   def test_should_write_the_impex_resupt_to_the_given_folder
@@ -96,7 +96,8 @@ class TestResult < Test::Unit::TestCase
     catalog_type = Type.new("Catalog", %w{id[unique=true] name[lang=de] name[lang=en] defaultCatalog})
     catalog = TypeEntry.new(catalog_type, %w{simpex_catalog SimpexCatalog SimpexCatalog true})
 
-    catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] active defaultCurrency(isocode)})
+    catalog_version_type = Type.new("CatalogVersion", %w{catalog(id)[unique=true] version[unique=true] 
+                                                                    active defaultCurrency(isocode)})
     TypeEntry.new(catalog_version_type, [catalog.id, "online", "true", "EUR"])
 
     result = ImpexResult.new(impex_dest_dir)

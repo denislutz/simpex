@@ -27,7 +27,7 @@ class Type
             raise ArgumentError.new "In the type '#{name}', you are using a macro but no macros are given at all, pass the macros as an array to the type constructor." 
           end
           if @macros.none?{|m| m.split("=").first == attribute.split("[").first}
-            raise ArgumentError.new "In the type #{name}, you are using a macro that is not defined: #{attribute}, declared macros are #{@macros.inspect}" 
+            raise ArgumentError.new "In the type '#{name}', you are using the macro '#{attribute}' that is not defined, defined macros are #{@macros.inspect}" 
           end
         end
       end

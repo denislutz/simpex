@@ -3,7 +3,8 @@ class ImpexResult
   attr_writer :memory_safe, :max_type_entries_in_tree
 
   def initialize(dest_folder)
-    raise "Given dest folder #{dest_folder} is either nil or does not exist!" if dest_folder.nil? || !Dir.exist?(dest_folder)
+    raise "Given dest folder #{dest_folder} is either nil or does not exist!" if dest_folder.nil? || 
+                                                                                  !Dir.exist?(dest_folder)
     @dest_folder = dest_folder
     @types = []
     @max_type_entries_in_tree = 2000 
@@ -49,7 +50,6 @@ class ImpexResult
 
   private
   def validate_macros
-    
     #collect all macros from all types
     @macros = @types.inject([]) do |result, type|
       type.macros.each do |macro|
@@ -57,11 +57,13 @@ class ImpexResult
       end
       result
     end
-
     #make sure each macro is used in at least one type
     @macros.each do |macro|
-      if @types.none? {|type| type.attributes.include?(macro)}
-        raise ArgumentError.new "the macro #{macro} is never used in all declared types"
+      macro_key = macro.split("=").first
+      not_used_in_types = @types.none? {|type| type.attributes.include?(macro_key)}
+      not_used_in_macros = @macros.none? {|m| !m.eql?(macro) && m.include?(macro_key)}
+      if not_used_in_types && not_used_in_macros  
+        raise ArgumentError.new "the macro #{macro} is never used in all declared types and macros"
       end
     end
   end
@@ -75,7 +77,7 @@ class ImpexResult
       end
       puts "writing complete result to the file #{file_name}"
       result_file_name = File.basename(result_file_name)
-      raise "You gave the directory #{result_file_name} instead of a single file" if File.directory?(result_file_name)
+      raise "You directory '#{result_file_name}' instead of a single file" if File.directory?(result_file_name)
       File.open(file_name, "w") do |f|
         all_macros = []
         @types.each do |type|
@@ -118,7 +120,8 @@ class ImpexResult
     def check_for_impexify
       if @memory_safe
         if  @global_enties_number > @max_type_entries_in_tree
-          puts "impexifying all entries since global entries #{@global_enties_number} is bigger then max #{@max_type_entries_in_tree}"
+          puts "impexifying all entries since global entries #{@global_enties_number} is bigger 
+                    then max #{@max_type_entries_in_tree}"
           self.impexify 
         end
       end
