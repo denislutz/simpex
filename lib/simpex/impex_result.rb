@@ -52,9 +52,7 @@ class ImpexResult
     
     #collect all macros from all types
     @macros = @types.inject([]) do |result, type|
-      puts type.name
       type.macros.each do |macro|
-        puts macro
         result << macro unless result.include?(macro)
       end
       result

@@ -47,6 +47,7 @@ class TestResult < Test::Unit::TestCase
     end 
 
     @product_type = Type.new("Product", %w{code[unique=true] name[lang=en] $firstmacro}, macros)
+    @category_type = Type.new("Category", %w{code[unique=true] name[lang=de]})
     result = ImpexResult.new(@impex_dest_dir)
     result << @category_type 
     result << @product_type
