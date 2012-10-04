@@ -20,19 +20,11 @@ class TestTypeEntry < Test::Unit::TestCase
     product_type.after_each << after_each
     assert_match /impex/, product_type.after_each.first
     assert_match /#%afterEach/, product_type.to_imp
-    puts product_type.to_imp
   end
 
   def test_should_create_a_type_entry
     entry = TypeEntry.new(@product_type, {"code" => "333", "name[lang=de]" => "MyName"})
     @product_type << entry
-    puts entry.inspect
-  end
-
-  def test_entry_should_verity_the_number_of_given_attributes
-    assert_raises ArgumentError do
-      entry = TypeEntry.new(@product_type, %w{66 myname myname pieces})
-    end
   end
 
   def test_entry_should_handle_array_containnig_specific_types
@@ -155,6 +147,18 @@ class TestTypeEntry < Test::Unit::TestCase
     assert_equal "SampleCategory", entry.supercategories
   end
 
+  def test_should_give_feedback_about_wrong_numbers_of_attributes
+    assert_raises ArgumentError do
+      language_type = Type.new("Language", %w{isocode[unique=true] active someOtherAtt})
+      TypeEntry.new(language_type, %w{de true})
+    end
+
+    assert_raises ArgumentError do
+      language_type = Type.new("Language", %w{isocode[unique=true] active})
+      TypeEntry.new(language_type, %w{de true xxx})
+    end
+
+  end
 
   private 
   def standard_result(impex_dest_dir)
